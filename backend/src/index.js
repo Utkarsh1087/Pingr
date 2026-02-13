@@ -13,6 +13,10 @@ import groupRoutes from "./routes/group.route.js";
 import { app, server } from "./lib/socket.js";
 
 dotenv.config();
+app.get("/", (req, res) => {
+  res.send("Pingr Backend is Running 🚀");
+});
+
 
 const PORT = process.env.PORT || 5001;
 const __dirname = path.resolve();
