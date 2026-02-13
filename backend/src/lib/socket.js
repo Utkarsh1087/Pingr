@@ -6,9 +6,11 @@ import User from "../models/user.model.js";
 const app = express();
 const server = http.createServer(app);
 
+const isProduction = process.env.NODE_ENV?.trim() === "production";
+
 const io = new Server(server, {
   cors: {
-    origin: process.env.NODE_ENV === "production" ? [process.env.FRONTEND_URL] : ["http://localhost:5173"],
+    origin: isProduction ? [process.env.FRONTEND_URL] : ["http://localhost:5173"],
   },
 });
 
