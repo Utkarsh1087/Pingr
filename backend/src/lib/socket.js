@@ -10,7 +10,9 @@ const isProduction = process.env.NODE_ENV?.trim() === "production";
 
 const io = new Server(server, {
   cors: {
-    origin: isProduction ? [process.env.FRONTEND_URL] : ["http://localhost:5173"],
+    origin: isProduction
+      ? [process.env.FRONTEND_URL, "https://pingr-frontend-five.vercel.app"]
+      : ["http://localhost:5173"],
   },
 });
 
