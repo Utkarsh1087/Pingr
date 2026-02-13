@@ -30,4 +30,35 @@
     ::-webkit-scrollbar-thumb {
         @apply bg-base-content/20 rounded-full hover:bg-base-content/30 transition-colors;
     }
+
+    /* Message Entry Animation */
+    @keyframes messageSlideIn {
+        from {
+            opacity: 0;
+            transform: translateY(10px);
+        }
+
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    .animate-message {
+        animation: messageSlideIn 0.3s ease-out forwards;
+    }
+
+    /* Chat Wallpapers */
+    .bg-wallpaper-1 {
+        background: radial-gradient(circle at top left, var(--p) 0%, transparent 40%), radial-gradient(circle at bottom right, var(--s) 0%, transparent 40%);
+    }
+
+    .bg-wallpaper-2 {
+        background: linear-gradient(135deg, var(--p) 20%, var(--a) 100%);
+        opacity: 0.1;
+    }
+
+    .bg-wallpaper-simple {
+        @apply bg-base-200/50;
+    }
 }

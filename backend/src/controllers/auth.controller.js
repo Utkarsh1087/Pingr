@@ -37,6 +37,7 @@ export const signup = async (req, res) => {
         fullName: newUser.fullName,
         email: newUser.email,
         profilePic: newUser.profilePic,
+        about: newUser.about,
       });
     } else {
       res.status(400).json({ message: "Invalid user data" });
@@ -69,6 +70,7 @@ export const login = async (req, res) => {
       fullName: user.fullName,
       email: user.email,
       profilePic: user.profilePic,
+      about: user.about,
     });
   } catch (error) {
     console.log("Error in login controller", error.message);
@@ -88,19 +90,23 @@ export const logout = (req, res) => {
 
 export const updateProfile = async (req, res) => {
   try {
-    const { profilePic } = req.body;
+    const { profilePic, about } = req.body;
     const userId = req.user._id;
 
-    if (!profilePic) {
-      return res.status(400).json({ message: "Profile pic is required" });
+    if (!profilePic && !about) {
+      return res.status(400).json({ message: "Profile pic or about is required" });
     }
 
-    const uploadResponse = await cloudinary.uploader.upload(profilePic);
-    const updatedUser = await User.findByIdAndUpdate(
-      userId,
-      { profilePic: uploadResponse.secure_url },
-      { new: true }
-    );   //By default, findOneAndUpdate() returns the document as it was before update was applied. If you set new: true, findOneAndUpdate() will instead give you the object after update was applied.
+    const updateData = {};
+    if (profilePic) {
+      const uploadResponse = await cloudinary.uploader.upload(profilePic);
+      updateData.profilePic = uploadResponse.secure_url;
+    }
+    if (about) {
+      updateData.about = about;
+    }
+
+    const updatedUser = await User.findByIdAndUpdate(userId, updateData, { new: true });
 
     res.status(200).json(updatedUser);
   } catch (error) {

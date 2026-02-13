@@ -5,7 +5,7 @@ import SidebarSkeleton from "./skeletons/SidebarSkeleton";
 import { Users } from "lucide-react";
 
 const Sidebar = () => {
-  const { getUsers, users, selectedUser, setSelectedUser, isUsersLoading } = useChatStore();
+  const { getUsers, users, selectedUser, setSelectedUser, isUsersLoading, typingUsers } = useChatStore();
 
   const { onlineUsers } = useAuthStore();
   const [showOnlineOnly, setShowOnlineOnly] = useState(false);
@@ -89,14 +89,13 @@ const Sidebar = () => {
                 }`}>
                 {user.fullName}
               </div>
-              <div className="text-xs font-medium text-base-content/40 flex items-center gap-1">
-                {onlineUsers.includes(user._id) ? (
-                  <>
-                    <span className="size-1.5 rounded-full bg-green-500" />
-                    <span className="text-green-500/80">Active now</span>
-                  </>
+              <div className="text-xs font-medium flex items-center gap-1 overflow-hidden">
+                {typingUsers.includes(user._id) ? (
+                  <span className="text-primary animate-pulse font-bold truncate">Typing...</span>
                 ) : (
-                  <span className="italic">Offline</span>
+                  <span className="text-base-content/40 truncate italic">
+                    {user.about || "Available"}
+                  </span>
                 )}
               </div>
             </div>

@@ -7,7 +7,23 @@ const MessageInput = () => {
   const [text, setText] = useState("");
   const [imagePreview, setImagePreview] = useState(null);
   const fileInputRef = useRef(null);
-  const { sendMessage } = useChatStore();
+  const { sendMessage, sendTyping, sendStopTyping, selectedUser } = useChatStore();
+  const typingTimeoutRef = useRef(null);
+
+  const handleTextChange = (e) => {
+    const value = e.target.value;
+    setText(value);
+
+    if (selectedUser) {
+      sendTyping(selectedUser._id);
+
+      if (typingTimeoutRef.current) clearTimeout(typingTimeoutRef.current);
+
+      typingTimeoutRef.current = setTimeout(() => {
+        sendStopTyping(selectedUser._id);
+      }, 2000);
+    }
+  };
 
   const handleImageChange = (e) => {
     const file = e.target.files[0];
@@ -33,6 +49,9 @@ const MessageInput = () => {
     if (!text.trim() && !imagePreview) return;
 
     try {
+      if (selectedUser) sendStopTyping(selectedUser._id);
+      if (typingTimeoutRef.current) clearTimeout(typingTimeoutRef.current);
+
       await sendMessage({
         text: text.trim(),
         image: imagePreview,
@@ -89,7 +108,7 @@ const MessageInput = () => {
             className="flex-1 bg-transparent border-none outline-none text-base placeholder:text-base-content/30 h-10 px-2"
             placeholder="Write your message..."
             value={text}
-            onChange={(e) => setText(e.target.value)}
+            onChange={handleTextChange}
           />
 
           <input
@@ -104,8 +123,8 @@ const MessageInput = () => {
         <button
           type="submit"
           className={`size-12 rounded-2xl flex items-center justify-center shadow-glass transition-all duration-300 ${text.trim() || imagePreview
-              ? "bg-primary text-primary-content hover:scale-105 active:scale-95 shadow-primary/25"
-              : "bg-base-content/5 text-base-content/20 cursor-not-allowed"
+            ? "bg-primary text-primary-content hover:scale-105 active:scale-95 shadow-primary/25"
+            : "bg-base-content/5 text-base-content/20 cursor-not-allowed"
             }`}
           disabled={!text.trim() && !imagePreview}
         >

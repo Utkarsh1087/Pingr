@@ -5,7 +5,9 @@ import ChatHeader from "./ChatHeader";
 import MessageInput from "./MessageInput";
 import MessageSkeleton from "./skeletons/MessageSkeleton";
 import { useAuthStore } from "../store/useAuthStore";
+import { useThemeStore } from "../store/useThemeStore";
 import { formatMessageTime } from "../lib/utils";
+import { Check, CheckCheck } from "lucide-react";
 
 const ChatContainer = () => {
   const {
@@ -17,6 +19,7 @@ const ChatContainer = () => {
     unsubscribeFromMessages,
   } = useChatStore();
   const { authUser } = useAuthStore();
+  const { wallpaper } = useThemeStore();
   const messageEndRef = useRef(null);
 
   useEffect(() => {
@@ -44,19 +47,23 @@ const ChatContainer = () => {
   }
 
   return (
-    <div className="flex-1 flex flex-col overflow-auto">
+    <div className="flex-1 flex flex-col overflow-auto relative">
+      {/* Dynamic Wallpaper Background */}
+      <div className={`absolute inset-0 z-0 transition-all duration-700 ${wallpaper}`} />
+
       <ChatHeader />
 
-      <div className="flex-1 overflow-y-auto p-6 space-y-6">
-        {messages.map((message) => {
+      <div className="flex-1 overflow-y-auto p-4 sm:p-6 space-y-6 relative z-10">
+        {messages.map((message, idx) => {
           const isSentByMe = message.senderId === authUser._id;
           return (
             <div
               key={message._id}
-              className={`chat ${isSentByMe ? "chat-end" : "chat-start"}`}
+              className={`chat ${isSentByMe ? "chat-end" : "chat-start"} animate-message`}
+              style={{ animationDelay: `${idx * 0.05}s` }}
             >
               <div className="chat-image avatar">
-                <div className="size-10 rounded-full ring-2 ring-base-content/5 ring-offset-1 ring-offset-base-100 overflow-hidden shadow-sm">
+                <div className="size-9 sm:size-10 rounded-full ring-2 ring-base-content/5 ring-offset-1 ring-offset-base-100 overflow-hidden shadow-sm">
                   <img
                     src={
                       isSentByMe
@@ -69,23 +76,20 @@ const ChatContainer = () => {
                 </div>
               </div>
 
-              <div className="chat-header mb-1.5 flex items-center gap-2 opacity-60">
-                <span className="text-xs font-bold">{isSentByMe ? "You" : selectedUser.fullName.split(' ')[0]}</span>
-                <time className="text-[10px] font-medium tracking-wide">
-                  {formatMessageTime(message.createdAt)}
-                </time>
+              <div className="chat-header mb-1 text-[10px] sm:text-xs font-bold opacity-60 flex items-center gap-2">
+                {isSentByMe ? "You" : selectedUser.fullName.split(' ')[0]}
               </div>
 
-              <div className={`chat-bubble flex flex-col p-3 rounded-2xl shadow-glass-sm max-w-[85%] sm:max-w-[70%] ${isSentByMe
-                  ? "bg-primary text-primary-content"
-                  : "bg-base-content/5 text-base-content backdrop-blur-sm"
+              <div className={`chat-bubble flex flex-col p-2.5 sm:p-3 rounded-2xl shadow-glass-sm max-w-[85%] sm:max-w-[70%] group relative ${isSentByMe
+                ? "bg-primary text-primary-content"
+                : "bg-base-100/80 text-base-content backdrop-blur-md border border-base-content/5"
                 }`}>
                 {message.image && (
-                  <div className="relative group cursor-zoom-in">
+                  <div className="relative group/img cursor-zoom-in">
                     <img
                       src={message.image}
                       alt="Attachment"
-                      className="rounded-xl mb-2 max-h-60 w-full object-cover shadow-lg transition-transform duration-300 group-hover:scale-[1.02]"
+                      className="rounded-xl mb-2 max-h-60 w-full object-cover shadow-lg transition-transform duration-300 group-hover/img:scale-[1.01]"
                     />
                   </div>
                 )}
@@ -94,16 +98,20 @@ const ChatContainer = () => {
                     {message.text}
                   </p>
                 )}
-              </div>
 
-              <div className="chat-footer mt-1.5 opacity-40">
-                <span className="text-[10px] font-medium uppercase tracking-tighter">
-                  {isSentByMe ? "Delivered" : "Received"}
-                </span>
+                <div className={`flex items-center gap-1.5 mt-1 self-end opacity-50 text-[9px] sm:text-[10px] font-bold ${isSentByMe ? "text-primary-content" : "text-base-content/60"}`}>
+                  {formatMessageTime(message.createdAt)}
+                  {isSentByMe && (
+                    <div className="transition-all duration-300 hover:scale-110">
+                      <CheckCheck size={12} className="text-primary-content animate-pulse" />
+                    </div>
+                  )}
+                </div>
               </div>
             </div>
           );
         })}
+        <div ref={messageEndRef} />
       </div>
 
       <MessageInput />

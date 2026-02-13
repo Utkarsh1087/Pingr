@@ -8,7 +8,13 @@ const PREVIEW_MESSAGES = [
 ];
 
 const SettingsPage = () => {
-  const { theme, setTheme } = useThemeStore();
+  const { theme, setTheme, wallpaper, setWallpaper } = useThemeStore();
+
+  const wallpapers = [
+    { id: "bg-wallpaper-1", name: "Glass Aurora", class: "bg-wallpaper-1" },
+    { id: "bg-wallpaper-2", name: "Deep Energy", class: "bg-wallpaper-2" },
+    { id: "bg-wallpaper-simple", name: "Minimalist", class: "bg-wallpaper-simple" },
+  ];
 
   return (
     <div className="min-h-screen container mx-auto px-4 pt-24 max-w-5xl">
@@ -45,6 +51,42 @@ const SettingsPage = () => {
           ))}
         </div>
 
+        <div className="space-y-4">
+          <div className="flex flex-col gap-1 px-2">
+            <h3 className="text-xl font-bold flex items-center gap-2">
+              <span className="size-2 rounded-full bg-secondary" />
+              Chat Wallpaper
+            </h3>
+            <p className="text-xs font-medium text-base-content/40">Choose a background style for your conversations</p>
+          </div>
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 px-2">
+            {wallpapers.map((wp) => (
+              <button
+                key={wp.id}
+                onClick={() => setWallpaper(wp.id)}
+                className={`
+                  p-4 rounded-3xl border transition-all duration-300 flex flex-col gap-3 relative overflow-hidden
+                  ${wallpaper === wp.id
+                    ? "bg-secondary/10 border-secondary ring-1 ring-secondary shadow-glass-sm"
+                    : "bg-base-content/5 border-base-content/5 hover:bg-base-content/10"}
+                `}
+              >
+                <div className={`h-12 w-full rounded-xl ${wp.class} opacity-60`} />
+                <span className={`text-xs font-bold uppercase tracking-wider text-center ${wallpaper === wp.id ? "text-secondary" : "text-base-content/60"}`}>
+                  {wp.name}
+                </span>
+                {wallpaper === wp.id && (
+                  <div className="absolute top-2 right-2">
+                    <div className="size-4 rounded-full bg-secondary flex items-center justify-center">
+                      <Send size={8} className="text-secondary-content rotate-[-45deg]" />
+                    </div>
+                  </div>
+                )}
+              </button>
+            ))}
+          </div>
+        </div>
+
         {/* Preview Section */}
         <div className="space-y-4">
           <h3 className="text-xl font-bold px-2 flex items-center gap-2">
@@ -74,32 +116,35 @@ const SettingsPage = () => {
                 </div>
 
                 {/* Chat Messages */}
-                <div className="p-6 space-y-6 min-h-[220px] max-h-[220px] overflow-y-auto bg-base-100/30">
-                  {PREVIEW_MESSAGES.map((message) => (
-                    <div
-                      key={message.id}
-                      className={`flex ${message.isSent ? "justify-end" : "justify-start"}`}
-                    >
+                <div className={`p-6 space-y-6 min-h-[220px] max-h-[220px] overflow-y-auto relative`}>
+                  <div className={`absolute inset-0 z-0 opacity-40 transition-all duration-500 ${wallpaper}`} />
+                  <div className="relative z-10 space-y-6">
+                    {PREVIEW_MESSAGES.map((message) => (
                       <div
-                        className={`
-                          max-w-[85%] rounded-2xl p-3.5 shadow-glass-sm font-medium text-sm
-                          ${message.isSent
-                            ? "bg-primary text-primary-content"
-                            : "bg-base-content/5 text-base-content backdrop-blur-sm"}
-                        `}
+                        key={message.id}
+                        className={`flex ${message.isSent ? "justify-end" : "justify-start"}`}
                       >
-                        <p>{message.content}</p>
-                        <time
+                        <div
                           className={`
-                            text-[10px] mt-1.5 font-bold uppercase tracking-widest block
-                            ${message.isSent ? "text-primary-content/50" : "text-base-content/30"}
+                            max-w-[85%] rounded-2xl p-3.5 shadow-glass-sm font-medium text-sm
+                            ${message.isSent
+                              ? "bg-primary text-primary-content"
+                              : "bg-base-100/80 text-base-content backdrop-blur-md border border-base-content/5"}
                           `}
                         >
-                          12:00 PM
-                        </time>
+                          <p>{message.content}</p>
+                          <time
+                            className={`
+                              text-[10px] mt-1.5 font-bold uppercase tracking-widest block
+                              ${message.isSent ? "text-primary-content/50" : "text-base-content/30"}
+                            `}
+                          >
+                            12:00 PM
+                          </time>
+                        </div>
                       </div>
-                    </div>
-                  ))}
+                    ))}
+                  </div>
                 </div>
 
                 {/* Chat Input */}

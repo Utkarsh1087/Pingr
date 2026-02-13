@@ -5,6 +5,8 @@ import { Camera, Mail, User } from "lucide-react";
 const ProfilePage = () => {
   const { authUser, isUpdatingProfile, updateProfile } = useAuthStore();
   const [selectedImg, setSelectedImg] = useState(null);
+  const [about, setAbout] = useState(authUser?.about || "Hey there! I'm using Pingr.");
+  const [isEditingAbout, setIsEditingAbout] = useState(false);
 
   const handleImageUpload = async (e) => {
     const file = e.target.files[0];
@@ -19,6 +21,11 @@ const ProfilePage = () => {
       setSelectedImg(base64Image);
       await updateProfile({ profilePic: base64Image });
     };
+  };
+
+  const handleAboutUpdate = async () => {
+    await updateProfile({ about });
+    setIsEditingAbout(false);
   };
 
   return (
@@ -91,6 +98,55 @@ const ProfilePage = () => {
               <div className="px-5 py-3.5 bg-base-content/5 rounded-2xl border border-base-content/5 font-semibold text-base-content shadow-inner">
                 {authUser?.email}
               </div>
+            </div>
+
+            <div className="space-y-2">
+              <div className="text-xs font-bold uppercase tracking-widest text-base-content/40 flex items-center justify-between px-1">
+                <div className="flex items-center gap-2">
+                  <MessageSquare className="size-4" />
+                  About Me
+                </div>
+                {!isEditingAbout ? (
+                  <button
+                    onClick={() => setIsEditingAbout(true)}
+                    className="text-primary hover:underline transition-all text-[10px] font-bold"
+                  >
+                    Edit Bio
+                  </button>
+                ) : (
+                  <div className="flex gap-2">
+                    <button
+                      onClick={handleAboutUpdate}
+                      disabled={isUpdatingProfile}
+                      className="text-primary hover:underline transition-all text-[10px] font-bold"
+                    >
+                      Save
+                    </button>
+                    <button
+                      onClick={() => {
+                        setIsEditingAbout(false);
+                        setAbout(authUser?.about);
+                      }}
+                      className="text-base-content/40 hover:text-base-content transition-all text-[10px] font-bold"
+                    >
+                      Cancel
+                    </button>
+                  </div>
+                )}
+              </div>
+              {isEditingAbout ? (
+                <textarea
+                  className="w-full px-5 py-3.5 bg-base-content/5 rounded-2xl border border-primary/20 font-medium text-base-content resize-none focus:ring-2 focus:ring-primary/20 outline-none transition-all"
+                  value={about}
+                  onChange={(e) => setAbout(e.target.value)}
+                  rows={2}
+                  maxLength={100}
+                />
+              ) : (
+                <div className="px-5 py-3.5 bg-base-content/5 rounded-2xl border border-base-content/5 font-medium text-base-content/80 shadow-inner">
+                  {authUser?.about || "Hey there! I'm using Pingr."}
+                </div>
+              )}
             </div>
           </div>
 
