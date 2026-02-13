@@ -11,60 +11,70 @@ const SettingsPage = () => {
   const { theme, setTheme } = useThemeStore();
 
   return (
-    <div className="h-screen container mx-auto px-4 pt-20 max-w-5xl">
-      <div className="space-y-6">
-        <div className="flex flex-col gap-1">
-          <h2 className="text-lg font-semibold">Theme</h2>
-          <p className="text-sm text-base-content/70">Choose a theme for your chat interface</p>
+    <div className="min-h-screen container mx-auto px-4 pt-24 max-w-5xl">
+      <div className="space-y-8">
+        <div className="flex flex-col gap-1 px-2">
+          <h2 className="text-3xl font-extrabold tracking-tight bg-gradient-to-br from-base-content to-base-content/70 bg-clip-text text-transparent">
+            Appearance
+          </h2>
+          <p className="text-sm font-medium text-base-content/40">Personalize your chat experience with a custom theme</p>
         </div>
 
-        <div className="grid grid-cols-4 sm:grid-cols-6 md:grid-cols-8 gap-2">
+        <div className="grid grid-cols-4 sm:grid-cols-6 md:grid-cols-8 gap-3 px-2">
           {THEMES.map((t) => (
             <button
               key={t}
               className={`
-                group flex flex-col items-center gap-1.5 p-2 rounded-lg transition-colors
-                ${theme === t ? "bg-base-200" : "hover:bg-base-200/50"}
+                group flex flex-col items-center gap-2 p-3 rounded-2xl transition-all duration-300
+                ${theme === t ? "bg-primary/10 ring-2 ring-primary shadow-glass-sm" : "hover:bg-base-content/5"}
               `}
               onClick={() => setTheme(t)}
             >
-              <div className="relative h-8 w-full rounded-md overflow-hidden" data-theme={t}>
-                <div className="absolute inset-0 grid grid-cols-4 gap-px p-1">
-                  <div className="rounded bg-primary"></div>
-                  <div className="rounded bg-secondary"></div>
-                  <div className="rounded bg-accent"></div>
-                  <div className="rounded bg-neutral"></div>
+              <div className="relative h-10 w-full rounded-xl overflow-hidden shadow-inner" data-theme={t}>
+                <div className="absolute inset-0 grid grid-cols-4 gap-px p-1.5 bg-base-100">
+                  <div className="rounded-lg bg-primary"></div>
+                  <div className="rounded-lg bg-secondary"></div>
+                  <div className="rounded-lg bg-accent"></div>
+                  <div className="rounded-lg bg-neutral"></div>
                 </div>
               </div>
-              <span className="text-[11px] font-medium truncate w-full text-center">
-                {t.charAt(0).toUpperCase() + t.slice(1)}
+              <span className={`text-[10px] font-bold uppercase tracking-widest truncate w-full text-center ${theme === t ? "text-primary" : "text-base-content/50"}`}>
+                {t}
               </span>
             </button>
           ))}
         </div>
 
         {/* Preview Section */}
-        <h3 className="text-lg font-semibold mb-3">Preview</h3>
-        <div className="rounded-xl border border-base-300 overflow-hidden bg-base-100 shadow-lg">
-          <div className="p-4 bg-base-200">
+        <div className="space-y-4">
+          <h3 className="text-xl font-bold px-2 flex items-center gap-2">
+            <span className="size-2 rounded-full bg-primary" />
+            Live Preview
+          </h3>
+          <div className="rounded-3xl border border-base-content/5 overflow-hidden bg-base-100/40 backdrop-blur-xl shadow-glass p-6 md:p-10">
             <div className="max-w-lg mx-auto">
               {/* Mock Chat UI */}
-              <div className="bg-base-100 rounded-xl shadow-sm overflow-hidden">
+              <div className="bg-base-100 rounded-3xl shadow-glass overflow-hidden border border-base-content/5">
                 {/* Chat Header */}
-                <div className="px-4 py-3 border-b border-base-300 bg-base-100">
-                  <div className="flex items-center gap-3">
-                    <div className="w-8 h-8 rounded-full bg-primary flex items-center justify-center text-primary-content font-medium">
-                      J
-                    </div>
-                    <div>
-                      <h3 className="font-medium text-sm">John Doe</h3>
-                      <p className="text-xs text-base-content/70">Online</p>
+                <div className="px-6 py-4 border-b border-base-content/5 bg-base-100/50 backdrop-blur-md">
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center gap-3">
+                      <div className="size-10 rounded-full bg-primary/10 flex items-center justify-center ring-2 ring-primary/20">
+                        <span className="text-primary font-bold text-sm">JD</span>
+                      </div>
+                      <div>
+                        <h3 className="font-bold text-sm">John Doe</h3>
+                        <div className="flex items-center gap-1">
+                          <span className="size-1.5 rounded-full bg-green-500" />
+                          <p className="text-[10px] font-bold text-green-500 uppercase tracking-widest">Online</p>
+                        </div>
+                      </div>
                     </div>
                   </div>
                 </div>
 
                 {/* Chat Messages */}
-                <div className="p-4 space-y-4 min-h-[200px] max-h-[200px] overflow-y-auto bg-base-100">
+                <div className="p-6 space-y-6 min-h-[220px] max-h-[220px] overflow-y-auto bg-base-100/30">
                   {PREVIEW_MESSAGES.map((message) => (
                     <div
                       key={message.id}
@@ -72,36 +82,38 @@ const SettingsPage = () => {
                     >
                       <div
                         className={`
-                          max-w-[80%] rounded-xl p-3 shadow-sm
-                          ${message.isSent ? "bg-primary text-primary-content" : "bg-base-200"}
+                          max-w-[85%] rounded-2xl p-3.5 shadow-glass-sm font-medium text-sm
+                          ${message.isSent
+                            ? "bg-primary text-primary-content"
+                            : "bg-base-content/5 text-base-content backdrop-blur-sm"}
                         `}
                       >
-                        <p className="text-sm">{message.content}</p>
-                        <p
+                        <p>{message.content}</p>
+                        <time
                           className={`
-                            text-[10px] mt-1.5
-                            ${message.isSent ? "text-primary-content/70" : "text-base-content/70"}
+                            text-[10px] mt-1.5 font-bold uppercase tracking-widest block
+                            ${message.isSent ? "text-primary-content/50" : "text-base-content/30"}
                           `}
                         >
                           12:00 PM
-                        </p>
+                        </time>
                       </div>
                     </div>
                   ))}
                 </div>
 
                 {/* Chat Input */}
-                <div className="p-4 border-t border-base-300 bg-base-100">
-                  <div className="flex gap-2">
+                <div className="p-4 border-t border-base-content/5 bg-base-100/50 backdrop-blur-md">
+                  <div className="flex gap-3 bg-base-content/5 p-1 rounded-2xl">
                     <input
                       type="text"
-                      className="input input-bordered flex-1 text-sm h-10"
-                      placeholder="Type a message..."
-                      value="This is a preview"
+                      className="bg-transparent border-none outline-none flex-1 py-2 px-3 text-sm placeholder:text-base-content/30"
+                      placeholder="Type your message..."
+                      value="Hey Pingr!"
                       readOnly
                     />
-                    <button className="btn btn-primary h-10 min-h-0">
-                      <Send size={18} />
+                    <button className="size-10 rounded-xl bg-primary text-primary-content flex items-center justify-center shadow-glass-sm hover:scale-105 transition-all">
+                      <Send size={20} />
                     </button>
                   </div>
                 </div>

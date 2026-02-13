@@ -22,34 +22,41 @@ const ProfilePage = () => {
   };
 
   return (
-    <div className="h-screen pt-20">
+    <div className="min-h-screen pt-20 bg-base-100/50">
       <div className="max-w-2xl mx-auto p-4 py-8">
-        <div className="bg-base-300 rounded-xl p-6 space-y-8">
-          <div className="text-center">
-            <h1 className="text-2xl font-semibold ">Profile</h1>
-            <p className="mt-2">Your profile information</p>
+        <div className="bg-base-100/60 backdrop-blur-xl rounded-3xl p-8 space-y-8 border border-base-content/5 shadow-glass relative overflow-hidden">
+          {/* Decorative background element */}
+          <div className="absolute top-0 right-0 w-32 h-32 bg-primary/5 rounded-full -translate-y-1/2 translate-x-1/2 blur-2xl" />
+
+          <div className="text-center relative z-10">
+            <h1 className="text-3xl font-extrabold tracking-tight bg-gradient-to-br from-base-content to-base-content/70 bg-clip-text text-transparent">
+              Profile
+            </h1>
+            <p className="mt-2 text-base-content/50 font-medium">Manage your personal information</p>
           </div>
 
           {/* avatar upload section */}
-
-          <div className="flex flex-col items-center gap-4">
-            <div className="relative">
-              <img
-                src={selectedImg || authUser.profilePic || "/avatar.png"}
-                alt="Profile"
-                className="size-32 rounded-full object-cover border-4 "
-              />
+          <div className="flex flex-col items-center gap-4 relative z-10">
+            <div className="relative group">
+              <div className="size-36 rounded-full ring-4 ring-primary/10 ring-offset-4 ring-offset-base-100 overflow-hidden shadow-2xl transition-transform duration-500 group-hover:scale-[1.02]">
+                <img
+                  src={selectedImg || authUser.profilePic || "/avatar.png"}
+                  alt="Profile"
+                  className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
+                />
+              </div>
               <label
                 htmlFor="avatar-upload"
                 className={`
-                  absolute bottom-0 right-0 
-                  bg-base-content hover:scale-105
-                  p-2 rounded-full cursor-pointer 
-                  transition-all duration-200
-                  ${isUpdatingProfile ? "animate-pulse pointer-events-none" : ""}
+                  absolute bottom-1 right-1 
+                  bg-primary hover:bg-primary-focus
+                  p-3 rounded-2xl cursor-pointer 
+                  transition-all duration-300 shadow-lg
+                  hover:scale-110 active:scale-95
+                  ${isUpdatingProfile ? "animate-pulse pointer-events-none opacity-50" : ""}
                 `}
               >
-                <Camera className="w-5 h-5 text-base-200" />
+                <Camera className="size-6 text-primary-content" />
                 <input
                   type="file"
                   id="avatar-upload"
@@ -60,39 +67,53 @@ const ProfilePage = () => {
                 />
               </label>
             </div>
-            <p className="text-sm text-zinc-400">
-              {isUpdatingProfile ? "Uploading..." : "Click the camera icon to update your photo"}
+            <p className="text-xs font-bold uppercase tracking-widest text-base-content/40">
+              {isUpdatingProfile ? "Uploading Profile..." : "Tap the icon to change photo"}
             </p>
           </div>
 
-          <div className="space-y-6">
-            <div className="space-y-1.5">
-              <div className="text-sm text-zinc-400 flex items-center gap-2">
-                <User className="w-4 h-4" />
+          <div className="space-y-6 relative z-10">
+            <div className="space-y-2">
+              <div className="text-xs font-bold uppercase tracking-widest text-base-content/40 flex items-center gap-2 px-1">
+                <User className="size-4" />
                 Full Name
               </div>
-              <p className="px-4 py-2.5 bg-base-200 rounded-lg border">{authUser?.fullName}</p>
+              <div className="px-5 py-3.5 bg-base-content/5 rounded-2xl border border-base-content/5 font-semibold text-base-content shadow-inner">
+                {authUser?.fullName}
+              </div>
             </div>
 
-            <div className="space-y-1.5">
-              <div className="text-sm text-zinc-400 flex items-center gap-2">
-                <Mail className="w-4 h-4" />
+            <div className="space-y-2">
+              <div className="text-xs font-bold uppercase tracking-widest text-base-content/40 flex items-center gap-2 px-1">
+                <Mail className="size-4" />
                 Email Address
               </div>
-              <p className="px-4 py-2.5 bg-base-200 rounded-lg border">{authUser?.email}</p>
+              <div className="px-5 py-3.5 bg-base-content/5 rounded-2xl border border-base-content/5 font-semibold text-base-content shadow-inner">
+                {authUser?.email}
+              </div>
             </div>
           </div>
 
-          <div className="mt-6 bg-base-300 rounded-xl p-6">
-            <h2 className="text-lg font-medium  mb-4">Account Information</h2>
-            <div className="space-y-3 text-sm">
-              <div className="flex items-center justify-between py-2 border-b border-zinc-700">
-                <span>Member Since</span>
-                <span>{authUser.createdAt?.split("T")[0]}</span>
+          <div className="mt-8 bg-primary/5 rounded-3xl p-8 relative z-10 border border-primary/10">
+            <h2 className="text-xl font-bold mb-6 flex items-center gap-2">
+              <span className="size-2 rounded-full bg-primary" />
+              Account Insights
+            </h2>
+            <div className="space-y-4">
+              <div className="flex items-center justify-between pb-4 border-b border-primary/10">
+                <span className="text-sm font-semibold text-base-content/60">Membership Profile</span>
+                <span className="text-sm font-bold text-base-content">Pingr Standard</span>
               </div>
-              <div className="flex items-center justify-between py-2">
-                <span>Account Status</span>
-                <span className="text-green-500">Active</span>
+              <div className="flex items-center justify-between pb-4 border-b border-primary/10">
+                <span className="text-sm font-semibold text-base-content/60">Member Since</span>
+                <span className="text-sm font-bold text-base-content">{authUser.createdAt?.split("T")[0]}</span>
+              </div>
+              <div className="flex items-center justify-between">
+                <span className="text-sm font-semibold text-base-content/60">Account Status</span>
+                <div className="flex items-center gap-2">
+                  <span className="size-2 rounded-full bg-emerald-500 animate-pulse" />
+                  <span className="text-sm font-bold text-emerald-500 uppercase tracking-wider">Verified Active</span>
+                </div>
               </div>
             </div>
           </div>

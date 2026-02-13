@@ -47,42 +47,63 @@ const ChatContainer = () => {
     <div className="flex-1 flex flex-col overflow-auto">
       <ChatHeader />
 
-      <div className="flex-1 overflow-y-auto p-4 space-y-4">
-        {messages.map((message) => (
-          <div
-            key={message._id}
-            className={`chat ${message.senderId === authUser._id ? "chat-end" : "chat-start"}`}
-            ref={messageEndRef}
-          >
-            <div className=" chat-image avatar">
-              <div className="size-10 rounded-full border">
-                <img
-                  src={
-                    message.senderId === authUser._id
-                      ? authUser.profilePic || "/avatar.png"
-                      : selectedUser.profilePic || "/avatar.png"
-                  }
-                  alt="profile pic"
-                />
+      <div className="flex-1 overflow-y-auto p-6 space-y-6">
+        {messages.map((message) => {
+          const isSentByMe = message.senderId === authUser._id;
+          return (
+            <div
+              key={message._id}
+              className={`chat ${isSentByMe ? "chat-end" : "chat-start"}`}
+            >
+              <div className="chat-image avatar">
+                <div className="size-10 rounded-full ring-2 ring-base-content/5 ring-offset-1 ring-offset-base-100 overflow-hidden shadow-sm">
+                  <img
+                    src={
+                      isSentByMe
+                        ? authUser.profilePic || "/avatar.png"
+                        : selectedUser.profilePic || "/avatar.png"
+                    }
+                    alt="profile pic"
+                    className="w-full h-full object-cover"
+                  />
+                </div>
+              </div>
+
+              <div className="chat-header mb-1.5 flex items-center gap-2 opacity-60">
+                <span className="text-xs font-bold">{isSentByMe ? "You" : selectedUser.fullName.split(' ')[0]}</span>
+                <time className="text-[10px] font-medium tracking-wide">
+                  {formatMessageTime(message.createdAt)}
+                </time>
+              </div>
+
+              <div className={`chat-bubble flex flex-col p-3 rounded-2xl shadow-glass-sm max-w-[85%] sm:max-w-[70%] ${isSentByMe
+                  ? "bg-primary text-primary-content"
+                  : "bg-base-content/5 text-base-content backdrop-blur-sm"
+                }`}>
+                {message.image && (
+                  <div className="relative group cursor-zoom-in">
+                    <img
+                      src={message.image}
+                      alt="Attachment"
+                      className="rounded-xl mb-2 max-h-60 w-full object-cover shadow-lg transition-transform duration-300 group-hover:scale-[1.02]"
+                    />
+                  </div>
+                )}
+                {message.text && (
+                  <p className="text-sm sm:text-base leading-relaxed whitespace-pre-wrap font-medium">
+                    {message.text}
+                  </p>
+                )}
+              </div>
+
+              <div className="chat-footer mt-1.5 opacity-40">
+                <span className="text-[10px] font-medium uppercase tracking-tighter">
+                  {isSentByMe ? "Delivered" : "Received"}
+                </span>
               </div>
             </div>
-            <div className="chat-header mb-1">
-              <time className="text-xs opacity-50 ml-1">
-                {formatMessageTime(message.createdAt)}
-              </time>
-            </div>
-            <div className="chat-bubble flex flex-col">
-              {message.image && (
-                <img
-                  src={message.image}
-                  alt="Attachment"
-                  className="sm:max-w-[200px] rounded-md mb-2"
-                />
-              )}
-              {message.text && <p>{message.text}</p>}
-            </div>
-          </div>
-        ))}
+          );
+        })}
       </div>
 
       <MessageInput />

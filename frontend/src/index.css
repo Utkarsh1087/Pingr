@@ -2,3 +2,32 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+@layer base {
+    body {
+        @apply font-sans antialiased;
+    }
+}
+
+@layer utilities {
+    .glass-effect {
+        @apply bg-opacity-60 backdrop-blur-md border border-white/10;
+    }
+
+    .glass-card {
+        @apply bg-base-100/60 backdrop-blur-lg border border-white/5 shadow-glass;
+    }
+
+    /* Custom Scrollbar */
+    ::-webkit-scrollbar {
+        width: 6px;
+    }
+
+    ::-webkit-scrollbar-track {
+        @apply bg-transparent;
+    }
+
+    ::-webkit-scrollbar-thumb {
+        @apply bg-base-content/20 rounded-full hover:bg-base-content/30 transition-colors;
+    }
+}

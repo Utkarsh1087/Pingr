@@ -48,36 +48,50 @@ const MessageInput = () => {
   };
 
   return (
-    <div className="p-4 w-full">
+    <div className="p-4 w-full border-t border-base-content/5 glass-effect">
       {imagePreview && (
-        <div className="mb-3 flex items-center gap-2">
-          <div className="relative">
+        <div className="mb-4 flex items-center gap-3">
+          <div className="relative group">
             <img
               src={imagePreview}
               alt="Preview"
-              className="w-20 h-20 object-cover rounded-lg border border-zinc-700"
+              className="w-24 h-24 object-cover rounded-2xl border-2 border-primary/20 shadow-glass"
             />
             <button
               onClick={removeImage}
-              className="absolute -top-1.5 -right-1.5 w-5 h-5 rounded-full bg-base-300
-              flex items-center justify-center"
+              className="absolute -top-2 -right-2 w-7 h-7 rounded-full bg-base-100
+              flex items-center justify-center shadow-lg border border-base-content/10 
+              text-error hover:scale-110 active:scale-95 transition-all"
               type="button"
             >
-              <X className="size-3" />
+              <X className="size-4" />
             </button>
+            <div className="absolute inset-0 bg-black/20 rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none flex items-center justify-center">
+              <p className="text-[10px] text-white font-bold uppercase tracking-widest">Remove</p>
+            </div>
           </div>
         </div>
       )}
 
-      <form onSubmit={handleSendMessage} className="flex items-center gap-2">
-        <div className="flex-1 flex gap-2">
+      <form onSubmit={handleSendMessage} className="flex items-center gap-3">
+        <div className="flex-1 flex items-center gap-3 bg-base-content/5 rounded-2xl p-1.5 focus-within:bg-base-content/10 focus-within:ring-2 focus-within:ring-primary/20 transition-all duration-300">
+          <button
+            type="button"
+            className={`flex items-center justify-center size-10 rounded-xl transition-all duration-200
+                     ${imagePreview ? "bg-emerald-500/10 text-emerald-500" : "hover:bg-base-content/10 text-base-content/40 hover:text-base-content"}`}
+            onClick={() => fileInputRef.current?.click()}
+          >
+            <Image size={22} className={imagePreview ? "animate-bounce" : ""} />
+          </button>
+
           <input
             type="text"
-            className="w-full input input-bordered rounded-lg input-sm sm:input-md"
-            placeholder="Type a message..."
+            className="flex-1 bg-transparent border-none outline-none text-base placeholder:text-base-content/30 h-10 px-2"
+            placeholder="Write your message..."
             value={text}
             onChange={(e) => setText(e.target.value)}
           />
+
           <input
             type="file"
             accept="image/*"
@@ -85,22 +99,17 @@ const MessageInput = () => {
             ref={fileInputRef}
             onChange={handleImageChange}
           />
-
-          <button
-            type="button"
-            className={`hidden sm:flex btn btn-circle
-                     ${imagePreview ? "text-emerald-500" : "text-zinc-400"}`}
-            onClick={() => fileInputRef.current?.click()}
-          >
-            <Image size={20} />
-          </button>
         </div>
+
         <button
           type="submit"
-          className="btn btn-sm btn-circle"
+          className={`size-12 rounded-2xl flex items-center justify-center shadow-glass transition-all duration-300 ${text.trim() || imagePreview
+              ? "bg-primary text-primary-content hover:scale-105 active:scale-95 shadow-primary/25"
+              : "bg-base-content/5 text-base-content/20 cursor-not-allowed"
+            }`}
           disabled={!text.trim() && !imagePreview}
         >
-          <Send size={22} />
+          <Send size={24} className={text.trim() || imagePreview ? "translate-x-0.5 -translate-y-0.5" : ""} />
         </button>
       </form>
     </div>

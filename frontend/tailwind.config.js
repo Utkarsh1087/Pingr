@@ -7,6 +7,11 @@ export default {
     extend: {
       fontFamily: {
         slackey: ['Slackey', 'cursive'],
+        sans: ['Outfit', 'sans-serif'],
+      },
+      boxShadow: {
+        'glass': '0 8px 32px 0 rgba(31, 38, 135, 0.37)',
+        'glass-sm': '0 4px 16px 0 rgba(31, 38, 135, 0.25)',
       },
     },
   },
