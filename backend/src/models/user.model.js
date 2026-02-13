@@ -24,6 +24,10 @@ const userSchema = new mongoose.Schema(
       type: String,
       default: "Hey there! I'm using Pingr.",
     },
+    lastSeen: {
+      type: Date,
+      default: Date.now,
+    },
   },
   { timestamps: true }
 );

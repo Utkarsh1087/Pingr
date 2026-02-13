@@ -103,7 +103,7 @@ const ProfilePage = () => {
             <div className="space-y-2">
               <div className="text-xs font-bold uppercase tracking-widest text-base-content/40 flex items-center justify-between px-1">
                 <div className="flex items-center gap-2">
-                  <MessageSquare className="size-4" />
+                  
                   About Me
                 </div>
                 {!isEditingAbout ? (

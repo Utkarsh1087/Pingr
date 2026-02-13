@@ -5,7 +5,8 @@ import { LogOut, MessageSquare, Settings, User } from "lucide-react";
 
 
 const Navbar = () => {
-  const { logout, authUser } = useAuthStore();
+  const logout = useAuthStore((state) => state.logout);
+  const authUser = useAuthStore((state) => state.authUser);
 
   return (
     <header
@@ -18,7 +19,7 @@ const Navbar = () => {
               to="/"
               className="flex items-center gap-2.5 hover:scale-105 active:scale-95 transition-all duration-200"
             >
-              
+
               <h1 className="text-3xl font-bold font-slackey tracking-tight bg-gradient-to-br from-base-content to-base-content/70 bg-clip-text text-transparent">
                 Pingr
               </h1>

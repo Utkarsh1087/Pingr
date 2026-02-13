@@ -20,35 +20,38 @@ const LoginPage = () => {
   return (
     <div className="min-h-screen grid lg:grid-cols-2 bg-base-100">
       {/* Left Side - Form */}
-      <div className="flex flex-col justify-center items-center p-6 sm:p-12 relative overflow-hidden">
-        {/* Background blur decorative element */}
-        <div className="absolute top-1/4 -left-20 size-64 bg-primary/10 rounded-full blur-3xl -z-10" />
+      <div className="flex flex-col justify-center items-center p-6 sm:p-12 relative overflow-hidden bg-gradient-to-br from-base-100 to-base-200">
+        {/* Subtle Decorative Background Element */}
+        <div className="absolute -top-24 -left-24 size-96 bg-primary/5 rounded-full blur-[100px] pointer-events-none" />
+        <div className="absolute -bottom-24 -right-24 size-96 bg-secondary/5 rounded-full blur-[100px] pointer-events-none" />
 
-        <div className="w-full max-w-md space-y-8 bg-base-100/40 p-8 rounded-3xl border border-base-content/5 shadow-glass backdrop-blur-sm">
-          {/* Logo */}
+        <div className="w-full max-w-md space-y-8 relative z-10">
+          {/* Logo & Header */}
           <div className="text-center">
-            <div className="flex flex-col items-center gap-3">
-              <div className="size-14 rounded-2xl bg-primary/15 flex items-center justify-center shadow-glass ring-1 ring-primary/20">
+            <div className="flex flex-col items-center gap-4">
+              <div className="size-14 rounded-2xl bg-primary/10 flex items-center justify-center shadow-glass ring-1 ring-primary/20 animate-in fade-in zoom-in duration-700">
                 <MessageSquare className="size-8 text-primary" />
               </div>
-              <h1 className="text-3xl font-extrabold mt-4 tracking-tight bg-gradient-to-br from-base-content to-base-content/70 bg-clip-text text-transparent">
-                Welcome Back
-              </h1>
-              <p className="text-base-content/50 font-medium">Ready to jump back into the conversation?</p>
+              <div className="space-y-2">
+                <h1 className="text-4xl font-black tracking-tight text-base-content">
+                  Welcome Back
+                </h1>
+                <p className="text-base-content/50 font-medium">Ready to jump back into the conversation?</p>
+              </div>
             </div>
           </div>
 
           {/* Form */}
-          <form onSubmit={handleSubmit} className="space-y-5">
-            <div className="space-y-1.5">
-              <label className="text-sm font-semibold text-base-content/70 px-1">Email address</label>
-              <div className="relative group">
+          <form onSubmit={handleSubmit} className="space-y-6 bg-base-100/50 backdrop-blur-xl p-8 rounded-[2.5rem] border border-base-content/5 shadow-2xl">
+            <div className="space-y-2">
+              <label className="text-xs font-bold uppercase tracking-wider text-base-content/60 ml-1">Email Address</label>
+              <div className="relative group/input">
                 <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
-                  <Mail className="size-5 text-base-content/30 group-focus-within:text-primary transition-colors" />
+                  <Mail className="size-5 text-base-content/30 group-focus-within/input:text-primary transition-colors" />
                 </div>
                 <input
                   type="email"
-                  className="w-full h-12 pl-12 pr-4 rounded-2xl bg-base-content/5 border-none outline-none focus:ring-2 focus:ring-primary/20 transition-all font-medium placeholder:text-base-content/30"
+                  className="w-full h-14 pl-12 pr-4 rounded-2xl bg-base-200/50 border border-transparent focus:border-primary/30 focus:bg-base-100 outline-none focus:ring-4 focus:ring-primary/10 transition-all font-medium placeholder:text-base-content/20"
                   placeholder="name@example.com"
                   value={formData.email}
                   onChange={(e) => setFormData({ ...formData, email: e.target.value })}
@@ -57,16 +60,16 @@ const LoginPage = () => {
               </div>
             </div>
 
-            <div className="space-y-1.5">
-              <label className="text-sm font-semibold text-base-content/70 px-1">Password</label>
-              <div className="relative group">
+            <div className="space-y-2">
+              <label className="text-xs font-bold uppercase tracking-wider text-base-content/60 ml-1">Password</label>
+              <div className="relative group/input">
                 <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
-                  <Lock className="size-5 text-base-content/30 group-focus-within:text-primary transition-colors" />
+                  <Lock className="size-5 text-base-content/30 group-focus-within/input:text-primary transition-colors" />
                 </div>
                 <input
                   type={showPassword ? "text" : "password"}
-                  className="w-full h-12 pl-12 pr-12 rounded-2xl bg-base-content/5 border-none outline-none focus:ring-2 focus:ring-primary/20 transition-all font-medium placeholder:text-base-content/30"
-                  placeholder="Enter your password"
+                  className="w-full h-14 pl-12 pr-12 rounded-2xl bg-base-200/50 border border-transparent focus:border-primary/30 focus:bg-base-100 outline-none focus:ring-4 focus:ring-primary/10 transition-all font-medium placeholder:text-base-content/20"
+                  placeholder="••••••••"
                   value={formData.password}
                   onChange={(e) => setFormData({ ...formData, password: e.target.value })}
                   required
@@ -83,11 +86,11 @@ const LoginPage = () => {
 
             <button
               type="submit"
-              className="w-full h-12 bg-primary text-primary-content rounded-2xl font-bold shadow-glass hover:scale-[1.02] active:scale-[0.98] transition-all disabled:opacity-50 disabled:scale-100 mt-2"
+              className="w-full h-14 bg-primary text-primary-content rounded-2xl font-bold text-lg shadow-lg shadow-primary/20 hover:shadow-primary/40 hover:-translate-y-0.5 active:translate-y-0 transition-all disabled:opacity-50 disabled:translate-y-0 mt-2"
               disabled={isLoggingIn}
             >
               {isLoggingIn ? (
-                <div className="flex items-center justify-center gap-2">
+                <div className="flex items-center justify-center gap-3">
                   <Loader2 className="size-5 animate-spin" />
                   <span>Signing in...</span>
                 </div>
@@ -98,9 +101,9 @@ const LoginPage = () => {
           </form>
 
           <div className="text-center pt-2">
-            <p className="text-sm font-medium text-base-content/50">
+            <p className="text-sm font-semibold text-base-content/40">
               Not a member yet?{" "}
-              <Link to="/signup" className="text-primary font-bold hover:underline transition-all">
+              <Link to="/signup" className="text-primary font-bold hover:underline decoration-2 underline-offset-4 transition-all">
                 Create an account
               </Link>
             </p>
