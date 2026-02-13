@@ -13,6 +13,6 @@ export const generateToken = (userId, res) => {
     sameSite: isProduction ? "none" : "strict",
     secure: isProduction,
   });
-
+//token error fixed
   return token;
 };
