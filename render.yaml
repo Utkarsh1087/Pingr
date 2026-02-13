@@ -8,7 +8,7 @@ services:
       - key: NODE_ENV
         value: production
       - key: MONGODB_URI
-        fromConfigVar: mongodb_uri
+        sync: false
       - key: JWT_SECRET
         generateValue: true
       - key: CLOUDINARY_CLOUD_NAME
