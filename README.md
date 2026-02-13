@@ -165,3 +165,7 @@ Contributions, issues, and feature requests are welcome!
 ---
 
 Built with ❤️ using the MERN stack
+
+
+
+preview: https://pingr-frontend-ppiewk66l-utkarsh-rajputs-projects.vercel.app/login
